@@ -1,5 +1,6 @@
 package stepdefs;
 
+import PageObjects.LandingPageObjects;
 import core.webDriverFactory;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
@@ -28,6 +29,8 @@ public class stepdefs {
     String url = "http://automationpractice.com";
     Scenario scn;
 
+    LandingPageObjects landingPageObjects;
+
     private static final Logger logger = LogManager.getLogger(stepdefs.class);
 
     @Before
@@ -36,6 +39,8 @@ public class stepdefs {
 
         String browserName = webDriverFactory.getBrowserName(); //get browser name by default chrome
         driver = webDriverFactory.getWebDriverForBrowser(browserName);
+
+       landingPageObjects = new  LandingPageObjects(driver);
 
     }
 
@@ -85,47 +90,34 @@ public class stepdefs {
 
     @Then("application logo is displayed with width as {string} and height as {string}")
     public void application_logo_is_displayed_with_width_as_and_height_as(String expected_width, String expected_height) {
-        boolean b = driver.findElement(By.xpath("//img[@width='350' and @height='99']")).isDisplayed();
-        Assert.assertEquals("application logo is displayed", true, b);
-        logger.info("application logo is displayed with width as "+expected_width + "and height as "+expected_height);
 
+       landingPageObjects.applicationLogoWidthHeightIsDisplayed(expected_width,expected_height);
+       logger.info("application logo is displayed with width as "+expected_width +"and height as "+expected_height);
     }
 
     @Then("product category list is displayed")
     public void product_category_list_is_displayed() {
 
-        ArrayList <String> expectedCategoryList = new ArrayList<>();
-        expectedCategoryList.add("WOMEN");
-        expectedCategoryList.add("DRESSES");
-        expectedCategoryList.add("T-SHIRTS");
-
-        List<WebElement> productCategoryList = driver.findElements(By.xpath("//div[@id='block_top_menu']/ul/li/a"));
-        for (int count = 0; count < expectedCategoryList.size(); count++) {
-
-            System.out.println((count+1)+" " + expectedCategoryList.get(count));
-                Assert.assertEquals("Product index no " + (count+1) + " is not matching with expected",expectedCategoryList.get(count),productCategoryList.get(count).getText());
-            }
-       logger.info("category list is displayed");
-        }
+        landingPageObjects.productCategoryListIsDisplayed();
+        logger.info("product category list is displayed");
+    }
 
     @When("user enters text as T-shirts in search box")
     public void user_enters_text_as_T_shirts_in_search_box(){
-        WebElement searchBox = driver.findElement(By.id("search_query_top"));
-        searchBox.sendKeys("T-shirts");
-        logger.info(searchBox+" is entered as text in search box");
+       landingPageObjects.EnterTextInSearchBox();
+       logger.info("text entered in search box ");
     }
 
     @Then("search result should contains T-shirts as text")
     public void search_result_should_contains_t_shirts_as_text() {
-        WebElement text= driver.findElement(By.xpath("//div[@class='ac_results']//ul//li"));
-        Assert.assertEquals(true,text.isDisplayed());
-        logger.info("search result shows :"+text);
+        landingPageObjects.SearchResultContainsText();
+        logger.info("search result contains search text is displayed");
     }
     @When("user clicks on twitter link")
     public void user_clicks_on_twitter_link() {
         WebElement twitterLink = driver.findElement(By.xpath("//section/ul/li[@class='twitter']"));
         twitterLink.click();
-    logger.info("twitter link is clicked");
+        logger.info("twitter link is clicked");
     }
 
     @Then("new tab is opened And shows account name as Selenium Framework")
@@ -133,28 +125,10 @@ public class stepdefs {
 
         System.out.println("current page title is: "+driver.getTitle());
 
-        Set<String> handles = driver.getWindowHandles();
-        Iterator<String> it = handles.iterator();
-
-        String parentId = it.next();
-        String childId = it.next();
-
-        driver.switchTo().window(childId);
-        logger.info("switched to new tab");
-
-        Thread.sleep(5000);
-
-        WebElement accName = driver.findElement(By.xpath("//span[contains(text(),'Selenium Framework')]"));
-      String an=  accName.getText();
-        Assert.assertEquals("Selenium Framework",an);
-        logger.info("account name is displayed as "+an);
-
-        String actualtitle = driver.getTitle();
-        Assert.assertEquals("Selenium Framework (@seleniumfrmwrk) / Twitter", actualtitle);
-        logger.info("current page title is "+actualtitle);
+        landingPageObjects.newTabWithAccountNameIsDisplayed();
+        logger.info("new tab is displayed");
 
     }
-
 
 
 
