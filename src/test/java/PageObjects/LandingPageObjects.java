@@ -18,7 +18,8 @@ public class LandingPageObjects {
 
     WebDriver driver;
 
-    private By logoWidthHeight = By.xpath("//img[@width='350' and @height='99']");
+    private By applicationLogo = By.xpath("//div[@id='header_logo']/a");
+    private By logoWidthHeight = By.xpath("//a/img[@width='350' and @height='99']");
     private By productList = By.xpath("//div[@id='block_top_menu']/ul/li/a");
     private By SearchBox = By.id("search_query_top");
     private By searchText = By.xpath("//div[@class='ac_results']//ul//li");
@@ -30,10 +31,30 @@ public class LandingPageObjects {
         this.driver= driver;
     }
 
-    public void applicationLogoWidthHeightIsDisplayed(String w , String h){
-        boolean b = driver.findElement(logoWidthHeight).isDisplayed();
+    public void landingPageIsDisplayed(){
+        String expectedTitle = "My Store";
+        String actualTitle = driver.getTitle();
+        Assert.assertEquals(expectedTitle,actualTitle);
+        logger.info("current page title is "+actualTitle);
+    }
+
+    public void applicationLogoIsDisplayed(){
+        boolean b = driver.findElement(applicationLogo).isDisplayed();
         Assert.assertEquals("application logo is displayed", true, b);
-        logger.info("application logo is displayed with width as "+w + "and height as "+h);
+    }
+
+    public void applicationLogoWidthHeightIsDisplayed(String w , String h){
+        int wid = Integer.valueOf(w);
+        int hei = Integer.valueOf(h);
+
+        boolean b = driver.findElement(logoWidthHeight).isDisplayed();
+
+        if(wid==350 && hei==99)
+        {
+            Assert.assertTrue(b);
+        }
+
+
     }
 
     public void productCategoryListIsDisplayed(){
