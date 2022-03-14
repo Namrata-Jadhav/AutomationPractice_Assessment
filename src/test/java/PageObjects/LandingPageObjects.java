@@ -49,10 +49,8 @@ public class LandingPageObjects {
 
         boolean b = driver.findElement(logoWidthHeight).isDisplayed();
 
-        if(wid==350 && hei==99)
-        {
-            Assert.assertTrue(b);
-        }
+        Assert.assertTrue("application logo is displayed with width "+wid+ "and height as "+hei,b);
+
 
 
     }
