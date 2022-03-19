@@ -19,7 +19,8 @@ public class LandingPageObjects {
     WebDriver driver;
 
     private By applicationLogo = By.xpath("//div[@id='header_logo']/a");
-    private By logoWidthHeight = By.xpath("//a/img[@width='350' and @height='99']");
+    private By logoWidth = By.xpath("//a/img[@width='350']");
+    private By logoHeight = By.xpath("//a/img[@height='99']");
     private By productList = By.xpath("//div[@id='block_top_menu']/ul/li/a");
     private By SearchBox = By.id("search_query_top");
     private By searchText = By.xpath("//div[@class='ac_results']//ul//li");
@@ -44,42 +45,61 @@ public class LandingPageObjects {
     }
 
     public void applicationLogoWidthHeightIsDisplayed(String w , String h){
-        int wid = Integer.valueOf(w);
-        int hei = Integer.valueOf(h);
+        String wid = driver.findElement(logoWidth).getAttribute("width");
+        String hei = driver.findElement(logoHeight).getAttribute("height");
 
-        boolean b = driver.findElement(logoWidthHeight).isDisplayed();
+          if(w.equals(wid) && h.equals(hei)) {
 
-        Assert.assertTrue("application logo is displayed with width "+wid+ "and height as "+hei,b);
-
-
-
-    }
-
-    public void productCategoryListIsDisplayed(){
-        ArrayList<String> expectedCategoryList = new ArrayList<>();
-        expectedCategoryList.add("WOMEN");
-        expectedCategoryList.add("DRESSES");
-        expectedCategoryList.add("T-SHIRTS");
-
-        List<WebElement> productCategoryList = driver.findElements(productList);
-        for (int count = 0; count < expectedCategoryList.size(); count++) {
-
-            System.out.println((count+1)+" " + expectedCategoryList.get(count));
-            Assert.assertEquals("Product index no " + (count+1) + " is not matching with expected",expectedCategoryList.get(count),productCategoryList.get(count).getText());
+              Assert.assertTrue("application logo is displayed with width " + w + "and height as " + h, true);
+       logger.info("application logo is displayed with actual width n height");
         }
-        logger.info("category list is displayed");
+
+        else
+        {
+            Assert.assertFalse("application logo width n height is mismatched",false);
+            logger.info("width n height mismatched");
+        }
     }
 
-    public void EnterTextInSearchBox(){
-        WebElement searchBar = driver.findElement(SearchBox);
-        searchBar.sendKeys("T-shirts");
-        logger.info(searchBar+" is entered as text in search box");
+
+    public void countOfMainProductCategoryListIsDisplayed(){
+        Integer productCategoryCount = driver.findElements(productList).size();
+        System.out.println(productCategoryCount);
+
+        logger.info("category count is : "+productCategoryCount);
+
+
+    }
+    public void productCategoryListIsDisplayed(String product){
+        List<WebElement> productCategoryList = driver.findElements(productList);
+        Iterator<WebElement> itr = productCategoryList.iterator();
+//        while(itr.hasNext())
+//        {
+//            if(product.equals(itr.next().getText()))
+//            {
+//                Assert.assertTrue(true);
+//                logger.info("product category list is displayed as: "+product);
+//            }
+//        }
+        for(int i=0; i<productCategoryList.size(); i++){
+            if (product.equals(itr.next().getText()))
+            {
+                Assert.assertTrue(true);
+                System.out.println( (i+1) +" . "+product );
+            }
+        }
+
+    }
+
+    public void EnterTextInSearchBox(String text){
+        driver.findElement(SearchBox).sendKeys(text);
+        logger.info(text+" is entered as text in search box");
     }
 
     public void SearchResultContainsText(){
-        WebElement text= driver.findElement(searchText);
-        Assert.assertEquals(true,text.isDisplayed());
-        logger.info("search result shows :"+text);
+        boolean b = driver.findElement(searchText).isDisplayed();
+        Assert.assertEquals(true,b);
+        logger.info("search result shows :"+b);
     }
 
     public void clickOnTwitterLink(){
@@ -88,7 +108,7 @@ public class LandingPageObjects {
         logger.info("twitter link is clicked");
     }
 
-    public void newTabWithAccountNameIsDisplayed() throws InterruptedException {
+    public void newTabWithNewUrlIsDisplayed(String expectedUrl) throws InterruptedException {
         Set<String> handles = driver.getWindowHandles();
         Iterator<String> it = handles.iterator();
 
@@ -99,15 +119,17 @@ public class LandingPageObjects {
         logger.info("switched to new tab");
 
         Thread.sleep(5000);
+        String actualUrl = driver.getCurrentUrl();
+
+        Assert.assertEquals(expectedUrl,actualUrl);
+    }
+
+    public void newTabWithAccountNameIsDisplayed(String expectedName) throws InterruptedException {
 
         WebElement accountName = driver.findElement(accName);
         String an=  accountName.getText();
         Assert.assertEquals("Selenium Framework",an);
         logger.info("account name is displayed as "+an);
-
-        String actualtitle = driver.getTitle();
-        Assert.assertEquals("Selenium Framework (@seleniumfrmwrk) / Twitter", actualtitle);
-        logger.info("current page title is "+actualtitle);
 
     }
 

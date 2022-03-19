@@ -69,7 +69,7 @@ public class stepdefs {
     @Given("user navigate to the application url")
     public void user_navigate_to_the_application_url() {
         driver.get(url);
-        System.out.println("application url is: "+url);
+       // System.out.println("application url is: "+url);
         logger.info("navigated to the url " +url);
     }
 
@@ -90,7 +90,8 @@ public class stepdefs {
 
     @When("user checks for visibility of application logo")
     public void user_checks_for_visibility_of_application_logo() {
-      landingPageObjects.applicationLogoIsDisplayed();
+        landingPageObjects.applicationLogoIsDisplayed();
+        logger.info("application logo is displayed");
     }
 
     @Then("application logo is displayed with width as {string} and height as {string}")
@@ -100,24 +101,32 @@ public class stepdefs {
        logger.info("application logo is displayed with width as "+expected_width +"and height as "+expected_height);
     }
 
-    @Then("product category list is displayed with count {int}")
-    public void product_category_list_is_displayed_with_count(Integer int1) {
-        landingPageObjects.productCategoryListIsDisplayed();
-        logger.info("product category list is displayed");
+    @Then("product main category list count is {int}")
+    public void product_main_category_list_count_is(Integer int1) {
+       landingPageObjects.countOfMainProductCategoryListIsDisplayed();
+       logger.info("product category list is displayed with count "+int1);
+    }
+
+    @Then("text for main product categories is shown as {string}")
+    public void text_for_main_product_categories_is_shown_as(String productName) {
+        logger.info("text of product category list is shown as : "+productName);
+        landingPageObjects.productCategoryListIsDisplayed(productName);
     }
 
 
-    @When("user enters text as T-shirts in search box")
-    public void user_enters_text_as_T_shirts_in_search_box(){
-       landingPageObjects.EnterTextInSearchBox();
-       logger.info("text entered in search box ");
+    @When("user enters text as {string} in search box")
+    public void user_enters_text_as_T_shirts_in_search_box(String text){
+       landingPageObjects.EnterTextInSearchBox(text);
+       logger.info("text entered in search box is "+text);
     }
 
-    @Then("search result should contains T-shirts as text")
-    public void search_result_should_contains_t_shirts_as_text() {
+
+    @Then("search result should contains {string} as text")
+    public void search_result_should_contains_as_text(String string) {
         landingPageObjects.SearchResultContainsText();
-        logger.info("search result contains search text is displayed");
+        logger.info("search result contains " + string + " as search text");
     }
+
     @When("user clicks on twitter link")
     public void user_clicks_on_twitter_link() {
         WebElement twitterLink = driver.findElement(By.xpath("//section/ul/li[@class='twitter']"));
@@ -125,16 +134,16 @@ public class stepdefs {
         logger.info("twitter link is clicked");
     }
 
-    @Then("new tab is opened And shows account name as Selenium Framework")
-    public void new_tab_is_opened_and_shows_account_name_as_selenium_framework() throws InterruptedException {
-
-        System.out.println("current page title is: "+driver.getTitle());
-
-        landingPageObjects.newTabWithAccountNameIsDisplayed();
-        logger.info("new tab is displayed");
-
+    @Then("new tab is opened with new url as {string}")
+    public void new_tab_is_opened_with_new_url_as(String expectedUrl) throws InterruptedException {
+        landingPageObjects.newTabWithNewUrlIsDisplayed(expectedUrl);
+        logger.info("new tab is opened with new url as "+expectedUrl);
     }
-
+    @Then("shows account name as {string}")
+    public void shows_account_name_as(String expectedName) throws InterruptedException {
+        landingPageObjects.newTabWithAccountNameIsDisplayed(expectedName);
+        logger.info("New tab contains account name as "+expectedName);
+    }
 
 
 }
