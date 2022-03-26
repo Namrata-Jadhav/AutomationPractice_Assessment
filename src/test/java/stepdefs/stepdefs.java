@@ -95,10 +95,10 @@ public class stepdefs {
     }
 
     @Then("application logo is displayed with width as {string} and height as {string}")
-    public void application_logo_is_displayed_with_width_as_and_height_as(String expected_width, String expected_height) {
+    public void application_logo_is_displayed_with_width_as_and_height_as(String expected_width,String expected_height) {
 
        landingPageObjects.applicationLogoWidthHeightIsDisplayed(expected_width,expected_height);
-       logger.info("application logo is displayed with width as "+expected_width +"and height as "+expected_height);
+       scn.log("application logo is displayed with width as "+expected_width +" and height as "+expected_height);
     }
 
     @Then("product main category list count is {int}")
@@ -122,9 +122,9 @@ public class stepdefs {
 
 
     @Then("search result should contains {string} as text")
-    public void search_result_should_contains_as_text(String string) {
-        landingPageObjects.SearchResultContainsText();
-        logger.info("search result contains " + string + " as search text");
+    public void search_result_should_contains_as_text(String text) {
+        landingPageObjects.SearchResultContainsText(text);
+        logger.info("search result contains " + text + " as search text");
     }
 
     @When("user clicks on twitter link")
