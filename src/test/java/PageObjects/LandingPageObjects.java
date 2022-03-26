@@ -44,21 +44,20 @@ public class LandingPageObjects {
         Assert.assertEquals("application logo is displayed", true, b);
     }
 
-    public void applicationLogoWidthHeightIsDisplayed(String w , String h){
+    public void applicationLogoWidthHeightIsDisplayed(String w ,String h){
         String wid = driver.findElement(logoWidth).getAttribute("width");
         String hei = driver.findElement(logoHeight).getAttribute("height");
 
-          if(w.equals(wid) && h.equals(hei)) {
-
-              Assert.assertTrue("application logo is displayed with width " + w + "and height as " + h, true);
-       logger.info("application logo is displayed with actual width n height");
-        }
-
-        else
-        {
-            Assert.assertFalse("application logo width n height is mismatched",false);
-            logger.info("width n height mismatched");
-        }
+          if(wid.equals(w) && hei.equals(h)) {
+              Assert.assertEquals( w, wid);
+              Assert.assertEquals(h, hei);
+              // Assert.assertTrue("application logo is displayed with width " + w + "and height " + h, true);
+              logger.info("application logo is displayed with actual width n height");
+          }
+          else {
+              Assert.fail("application logo width n height is mismatched");
+              logger.fatal("width n height are mismatched");
+          }
     }
 
 
@@ -96,10 +95,17 @@ public class LandingPageObjects {
         logger.info(text+" is entered as text in search box");
     }
 
-    public void SearchResultContainsText(){
-        boolean b = driver.findElement(searchText).isDisplayed();
-        Assert.assertEquals(true,b);
-        logger.info("search result shows :"+b);
+    public void SearchResultContainsText(String text){
+        String searchWord = driver.findElement(searchText).getText();
+        if(searchWord.contains(text))
+        {
+            Assert.assertTrue("search result contains text as "+text,true);
+        }
+        else
+        {
+            Assert.fail("search result does not contain the text as "+text);
+        }
+        logger.info("search result shows :"+text);
     }
 
     public void clickOnTwitterLink(){

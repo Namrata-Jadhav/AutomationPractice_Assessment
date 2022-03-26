@@ -11,7 +11,7 @@ Feature: Application landing Page Feature
   @TC2
   Scenario: application logo validation
     When user checks for visibility of application logo
-    Then application logo is displayed with width as "350" and height as "99"
+    Then application logo is displayed with width as "35" and height as "99"
 
   @TC3
   Scenario Outline: application product main category list validation
